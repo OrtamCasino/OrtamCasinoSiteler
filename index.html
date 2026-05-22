@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CasinoOrtamSiteler</title>
+    <!-- Google Fonts & FontAwesome İkonları -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Canlı Renk Paleti ve Temel Ayarlar */
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --primary-neon: #00f2fe; /* Canlı Turkuaz */
+            --secondary-neon: #4facfe; /* Canlı Mavi */
+            --accent-mint: #00ff87; /* Enerjik Mint Yeşili */
+            --text-light: #f8fafc;
+            --vip-gold: #ffd700; /* VIP Altın Sarısı */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Üst Bar (Navbar) */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary-neon);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-neon), var(--accent-mint));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: none; /* Büyük harf zorlamasını kaldırdık, tam yazıldığı gibi çıkması için */
+            letter-spacing: 1px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* +18 Uyarı İşareti */
+        .age-restriction {
+            background: transparent;
+            border: 2px solid #ef4444;
+            color: #ef4444;
+            padding: 4px 8px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: default;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Hamburger Menü Butonu */
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--primary-neon);
+            font-size: 28px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            transform: scale(1.1);
+            color: var(--accent-mint);
+        }
+
+        /* Yan Açılır Menü (Sidebar) */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100vh;
+            background: #111827;
+            border-left: 3px solid var(--accent-mint);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            z-index: 200;
+            transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+            padding: 40px 25px;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-size: 30px;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 20px;
+        }
+
+        /* Menü Bölümleri */
+        .menu-section {
+            margin-top: 60px;
+        }
+
+        .menu-section h3 {
+            font-size: 18px;
+            color: var(--accent-mint);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 5px;
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-list li {
+            margin-bottom: 15px;
+        }
+
+        .menu-list a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 16px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.03);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .menu-list a:hover {
+            background: linear-gradient(90deg, rgba(0,242,254,0.15), rgba(0,255,135,0.15));
+            border-left: 4px solid var(--primary-neon);
+            padding-left: 20px;
+            color: var(--primary-neon);
+        }
+
+        .menu-list i {
+            font-size: 20px;
+            width: 25px;
+            text-align: center;
+        }
+
+        /* Sayfa İçerik Alanları ve Geçiş Efektleri */
+        .page-section {
+            margin-top: 100px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Kategori Başlıkları */
+        .category-block {
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .vip-title { color: var(--vip-gold); border-bottom-color: rgba(255, 215, 0, 0.2); }
+        .guvenilir-title { color: var(--accent-mint); border-bottom-color: rgba(0, 255, 135, 0.2); }
+        .normal-title { color: var(--primary-neon); border-bottom-color: rgba(0, 242, 254, 0.2); }
+
+        /* Kart Gridi */
+        .site-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Kart Tasarımları */
+        .site-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .vip-card:hover { transform: translateY(-5px); border-color: var(--vip-gold); box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
+        .guvenilir-card:hover { transform: translateY(-5px); border-color: var(--accent-mint); box-shadow: 0 0 20px rgba(0, 255, 135, 0.2); }
+        .normal-card:hover { transform: translateY(-5px); border-color: var(--primary-neon); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); }
+
+        .site-name { font-size: 22px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .vip-card .site-name { color: var(--vip-gold); }
+        .guvenilir-card .site-name { color: var(--accent-mint); }
+        .normal-card .site-name { color: var(--primary-neon); }
+
+        .site-info { font-size: 15px; color: #94a3b8; line-height: 1.6; margin-bottom: 20px; min-height: 50px; }
+
+        /* Butonlar */
+        .go-btn {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 12px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .vip-card .go-btn { background: linear-gradient(45deg, var(--vip-gold), #b59410); color: #000; }
+        .guvenilir-card .go-btn { background: linear-gradient(45deg, var(--accent-mint), #00b359); color: #000; }
+        .normal-card .go-btn { background: linear-gradient(45deg, var(--primary-neon), var(--secondary-neon)); color: #000; }
+
+        .go-btn:hover { filter: brightness(1.2); letter-spacing: 2px; }
+
+        /* SOSYAL MEDYA SAYFASI ÖZEL TASARIMI */
+        .social-page-title {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary-neon), var(--accent-mint));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .social-page-subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .social-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 25px 15px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .social-card i {
+            font-size: 45px;
+        }
+
+        .social-card span {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Sosyal Medya Kartları Hover Renkleri */
+        .sc-youtube:hover { border-color: #FF0000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); transform: translateY(-5px); }
+        .sc-tg-sohbet:hover { border-color: #229ED9; box-shadow: 0 0 20px rgba(34, 158, 217, 0.2); transform: translateY(-5px); }
+        .sc-tg-duyuru:hover { border-color: #24A1DE; box-shadow: 0 0 20px rgba(36, 161, 222, 0.2); transform: translateY(-5px); }
+        .sc-tg-kanal2:hover { border-color: #0088cc; box-shadow: 0 0 20px rgba(0, 136, 204, 0.2); transform: translateY(-5px); }
+        .sc-tg-kanal3:hover { border-color: #26a5e4; box-shadow: 0 0 20px rgba(38, 165, 228, 0.2); transform: translateY(-5px); }
+
+        /* Arka Plan Karartma */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(3px);
+            z-index: 150;
+            display: none;
+        }
+
+        .overlay.active { display: block; }
+
+        /* Mobil Uyum */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .page-section { padding: 20px 15px; margin-top: 90px; }
+            .sidebar { width: 100%; right: -100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Arka Plan Karartma -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Üst Menü Çubuğu -->
+    <header>
+        <div class="logo">CasinoOrtamSiteler</div>
+        <div class="nav-right">
+            <span class="age-restriction" title="18 Yaşından Küçükler Giremez">+18</span>
+            <button class="menu-btn" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Yan Menü (Sidebar) -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleMenu()">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <!-- Yönlendirme Menüsü -->
+        <div class="menu-section">
+            <h3>Menü</h3>
+            <ul class="menu-list">
+                <li><a onclick="showPage('home')"><i class="fas fa-home" style="color: var(--primary-neon);"></i> Ana Sayfa</a></li>
+                <li><a onclick="showPage('social')"><i class="fas fa-share-alt" style="color: var(--accent-mint);"></i> Sosyal Medya</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ================= 1. SAYFA: ANA SAYFA (SİTELER) ================= -->
+    <main id="home-page" class="page-section">
+
+        <!-- 1. SIRA: VIP SİTELER -->
+        <div class="category-block">
+            <h2 class="category-title vip-title"><i class="fas fa-crown"></i> VIP Siteler</h2>
+            <div class="site-grid">
+                
+                <!-- Lordpalace -->
+                <div class="site-card vip-card">
+                    <div>
+                        <div class="site-name">Lordpalace</div>
+                        <div class="site-info">250₺ deneme bonusu <br>Kuralsız site</div>
+                    </div>
+                    <a href="http://tinyurl.com/9tsfyzf3?btag=2698487" target="_blank" class="go-btn">Giriş Yap</a>
+                </div>
+
+                <!-- Solo bet -->
+                <div class="site-card vip-card">
+                    <div>
+                        <div class="site-name">Solo bet</div>
+                        <div class="site-info">1000₺ deneme bonusu</div>
+                    </div>
+                    <a href="https://affsolo.com/TNcj" target="_blank" class="go-btn">Giriş Yap</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 2. SIRA: GÜVENİLİR SİTELER -->
+        <div class="category-block">
+            <h2 class="category-title guvenilir-title"><i class="fas fa-shield-alt"></i> Güvenilir Siteler</h2>
+            <div class="site-grid">
+                
+                <!-- Haydi -->
+                <div class="site-card guvenilir-card">
+                    <div>
+                        <div class="site-name">Haydi</div>
+                        <div class="site-info">%15 kayıp bonus</div>
+                    </div>
+                    <a href="http://www.haydigell.com/affiliates/?btag=2692880" target="_blank" class="go-btn">Giriş Yap</a>
+                </div>
+
+                <!-- Marsbahis -->
+                <div class="site-card guvenilir-card">
+                    <div>
+                        <div class="site-name">Marsbahis</div>
+                        <div class="site-info">Mars demek banka demek 100m günlük çekim</div>
+                    </div>
+                    <a href="https://bit.ly/4bBfeoT" target="_blank" class="go-btn">Giriş Yap</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 3. SIRA: SİTELER -->
+        <div class="category-block">
+            <h2 class="category-title normal-title"><i class="fas fa-list"></i> Siteler</h2>
+            <div class="site-grid">
+                
+                <!-- Orisbet -->
+                <div class="site-card normal-card">
+                    <div>
+                        <div class="site-name">Orisbet</div>
+                        <div class="site-info">%30 kayıp bonusu</div>
+                    </div>
+                    <a href="https://orislink.xyz/oriscsnbhs" target="_blank" class="go-btn">Giriş Yap</a>
+                </div>
+
+                <!-- Bahissende -->
+                <div class="site-card normal-card">
+                    <div>
+                        <div class="site-name">Bahissende</div>
+                        <div class="site-info">%100 bonus</div>
+                    </div>
+                    <a href="https://dub.sh/bsendekzndryr" target="_blank" class="go-btn">Giriş Yap</a>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ================= 2. SAYFA: SOSYAL MEDYA SAYFASI ================= -->
+    <main id="social-page" class="page-section hidden">
+        <h1 class="social-page-title">Sosyal Medya Hesaplarımız</h1>
+        <p class="social-page-subtitle">Bizleri resmi hesaplarımızdan takip ederek etkinlikleri ve güncel analizleri kaçırmayın!</p>
+        
+        <div class="social-grid">
+            <!-- YouTube -->
+            <a href="https://youtube.com/@ruletathena?si=iXD7pi5YKVBIqcdm" target="_blank" class="social-card sc-youtube">
+                <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                <span>YouTube</span>
+            </a>
+            
+            <!-- Telegram Sohbet -->
+            <a href="https://t.me/ortamcasinosohbet" target="_blank" class="social-card sc-tg-sohbet">
+                <i class="fab fa-telegram-plane" style="color: #229ED9;"></i>
+                <span>Telegram Sohbet</span>
+            </a>
+            
+            <!-- Telegram Duyuru -->
+            <a href="https://t.me/ortamcasinoduyuru" target="_blank" class="social-card sc-tg-duyuru">
+                <i class="fab fa-telegram-plane" style="color: #24A1DE;"></i>
+                <span>Telegram Duyuru</span>
+            </a>
+            
+            <!-- 2. Telegram -->
+            <a href="https://t.me/ruletathena" target="_blank" class="social-card sc-tg-kanal2">
+                <i class="fab fa-telegram-plane" style="color: #0088cc;"></i>
+                <span>2. Telegram Kanalı</span>
+            </a>
+
+            <!-- 3. Telegram -->
+            <a href="https://t.me/casinoberk" target="_blank" class="social-card sc-tg-kanal3">
+                <i class="fab fa-telegram-plane" style="color: #26a5e4;"></i>
+                <span>3. Telegram Kanalı</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Menü ve Sayfa Kontrol JavaScript Kodları -->
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function showPage(pageName) {
+            const homePage = document.getElementById('home-page');
+            const socialPage = document.getElementById('social-page');
+
+            if (pageName === 'home') {
+                homePage.classList.remove('hidden');
+                socialPage.classList.add('hidden');
+            } else if (pageName === 'social') {
+                socialPage.classList.remove('hidden');
+                homePage.classList.add('hidden');
+            }
+
+            toggleMenu();
+        }
+    </script>
+
+</body>
+</html>
